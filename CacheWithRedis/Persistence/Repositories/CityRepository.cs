@@ -11,4 +11,3 @@ public class CityRepository : EfRepositoryBase<City, BaseDbContext>, ICityReposi
 
 	}
 }
-
