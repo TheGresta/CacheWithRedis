@@ -1,4 +1,5 @@
-﻿using Core.Repositories;
+﻿using Application.Services;
+using Core.Repositories;
 using Persistence.Context;
 using Persistence.Entities;
 
@@ -8,7 +9,6 @@ public class CountryRepository : EfRepositoryBase<Country, BaseDbContext>, ICoun
 {
     public CountryRepository(BaseDbContext context) : base(context)
     {
-
     }
 }
 

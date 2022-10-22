@@ -1,4 +1,5 @@
-﻿using Core.Repositories;
+﻿using Application.Services;
+using Core.Repositories;
 using Persistence.Context;
 using Persistence.Entities;
 
@@ -8,6 +9,5 @@ public class CityRepository : EfRepositoryBase<City, BaseDbContext>, ICityReposi
 {
 	public CityRepository(BaseDbContext context) : base(context)
 	{
-
 	}
 }
