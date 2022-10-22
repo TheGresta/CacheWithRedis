@@ -1,6 +1,8 @@
-﻿namespace Persistence.Entities;
+﻿using Core.Entity;
 
-public class City
+namespace Persistence.Entities;
+
+public class City : BaseEntity
 {
     public int CityId { get; set; }
     public string Name { get; set; }
