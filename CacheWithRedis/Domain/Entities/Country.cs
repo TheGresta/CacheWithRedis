@@ -1,5 +1,4 @@
 ﻿using Core.Entity;
-using Microsoft.VisualBasic;
 
 namespace Persistence.Entities;
 
