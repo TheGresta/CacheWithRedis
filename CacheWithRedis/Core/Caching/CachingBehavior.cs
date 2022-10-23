@@ -40,6 +40,7 @@ public class CachingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, 
             Debug.WriteLine($"Added to Cache -> {request.CacheKey}");
         }
 
+
         async Task<TResponse> GetResponseAndAddToCache()
         {
             response = await next();

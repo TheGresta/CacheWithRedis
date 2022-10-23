@@ -1,4 +1,5 @@
 ﻿using MediatR;
+using Microsoft.Extensions.Configuration;
 using StackExchange.Redis;
 using System.Diagnostics;
 
@@ -8,10 +9,15 @@ public class CacheRemovingBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
     where TRequest : IRequest<TResponse>, ICacheRemoverRequest
 {
     private readonly IDatabase _database;
+    private readonly IServer _server;
 
-    public CacheRemovingBehavior(IConnectionMultiplexer connectionMultiplexer)
+    public CacheRemovingBehavior(IConnectionMultiplexer connectionMultiplexer, IConfiguration configuration)
     {
         _database = connectionMultiplexer.GetDatabase();
+
+        string[] connection = configuration.GetConnectionString("RedisConnection").Split(":");
+
+        _server = connectionMultiplexer.GetServer(host: connection[0], port: int.Parse(connection[1]));
     }
 
     public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
@@ -19,11 +25,11 @@ public class CacheRemovingBehavior<TRequest, TResponse> : IPipelineBehavior<TReq
         if (request.BypassCache)
             return await next();
 
-        foreach (string cacheKEy in request.CacheKeys)
-        {
-            await _database.KeyDeleteAsync(cacheKEy);
-            Debug.WriteLine($"Removed Cache -> {cacheKEy}");
-        }
+        RedisKey[] keys = _server.Keys(database: 0, pattern: "*" + request.CacheKey + "*").ToArray();
+
+        await _database.KeyDeleteAsync(keys);
+
+        Debug.WriteLine($"Removed Cache -> {request.CacheKey}");
 
         return await next();
     }
