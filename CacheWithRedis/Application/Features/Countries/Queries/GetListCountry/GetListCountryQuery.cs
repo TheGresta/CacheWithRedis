@@ -1,6 +1,7 @@
 ﻿using Application.Features.Countries.Models;
 using Application.Services;
 using AutoMapper;
+using Core.Caching;
 using Core.Paging;
 using Core.Requests;
 using MediatR;
@@ -9,9 +10,16 @@ using Persistence.Entities;
 
 namespace Application.Features.Countries.Queries.GetListCountry;
 
-public class GetListCountryQuery : IRequest<CountryListModel>
+public class GetListCountryQuery : IRequest<CountryListModel>, ICachableRequest
 {
     public PageRequest PageRequest { get; set; }
+
+    public bool BypassCache => false;
+
+    public string CacheKey => $"{this.GetType().Name}&pagesize={this.PageRequest.Page}&page{this.PageRequest.PageSize}";
+
+    public TimeSpan? SlidingExpiration => TimeSpan.FromMinutes(30);
+
     public class GetListCountryQueryHandler : IRequestHandler<GetListCountryQuery, CountryListModel>
     {
         private readonly ICountryRepository _countryRepository;
