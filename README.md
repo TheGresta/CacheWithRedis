@@ -37,7 +37,7 @@
     public TimeSpan? SlidingExpiration => TimeSpan.FromMinutes(20);
 ```
 
-### :three: GetListCityQuery
+### :three: DeleteCityCommand
 
 ``` ruby
     public bool BypassCache => true;
