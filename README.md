@@ -32,7 +32,7 @@
 ``` ruby
     public bool BypassCache => false;
 
-    public string CacheKey => $"{this.GetType().Name}&pagesize={this.PageRequest.Page}&page{this.PageRequest.PageSize}";
+    public string CacheKey => $"{this.GetType().Name}&pagesize={this.PageRequest.Page}&page={this.PageRequest.PageSize}";
 
     public TimeSpan? SlidingExpiration => TimeSpan.FromMinutes(20);
 ```
